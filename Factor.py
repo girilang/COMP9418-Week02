@@ -114,24 +114,23 @@ class Factor:
         for i in range(num_new_axes):
             # add an axis to self_t. E.g. if shape is [3,5], new shape will be [3,5,1]
             self_t = np.expand_dims(self_t, -1) 
-    #    num_new_axes = len(set(self.domain) - set(other.domain))
-    #    for i in range(num_new_axes):
-    #        # add an axis to other_t. E.g. if shape is [3,5], new shape will be [3,5,1]
-    #        ... # TODO 
+        num_new_axes = len(set(self.domain) - set(other.domain))
+        for i in range(num_new_axes):
+            # add an axis to other_t. E.g. if shape is [3,5], new shape will be [3,5,1]
+            other_t = np.expand_dims(other_t, -1)       
 
         # And we need the new axes to be transposed to the correct location
         old_order = list(other.domain) + list(set(self.domain) - set(other.domain)) 
         new_order = []
         for v in new_dom:
             new_order.append(old_order.index(v))
-        if num_new_axes > 0:
-            other_t = other_t.transpose(tuple(new_order))
-        # TODO reorder the axes of other_t to new_order (look up np.transpose)
+        # reorder the axes of other_t to new_order (look up np.transpose)
+        other_t = other_t.transpose(tuple(new_order))
 
         # Now that the arrays are all set up, we can rely on numpy broadcasting to work out which numbers need to be multiplied.
         # https://numpy.org/doc/stable/user/basics.broadcasting.html
+        # multiply the two arrays
         new_table = self_t * other_t
-        #TODO multiply the two arrays
 
         # The final step is to create the new outcomeSpace
         new_outcomeSpace = self.outcomeSpace.copy()
@@ -162,7 +161,7 @@ class Factor:
                 
                 # create a tuple of "slice" objects, all of them `slice(None)` except
                 # for the one corresponding to the `var` axis.
-                # TODO (for loop or list comprehension required)
+                # (for loop or list comprehension required)
 
     
                 slices = tuple(slice(valuepos, valuepos+1) if v == var else slice(None) for v in f.domain)             
@@ -203,8 +202,8 @@ class Factor:
         Usage: fac.normalize()
         This returns a normalized factor.
         '''
+        # divide all elements of table by sum of every element
         self.table = self.table/np.sum(self.table) 
-        # TODO divide all elements of table by sum of every element
         return self
     
     def copy(self):
