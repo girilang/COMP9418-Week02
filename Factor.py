@@ -1,7 +1,7 @@
 # combinatorics
 from itertools import product
 # table formating for screen output
-#from tabulate import tabulate
+from tabulate import tabulate
 # numpy is used for n-dimensional arrays
 import numpy as np
 import copy
